@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Imolate - Buscador de Seeds Balatro</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h1>🧠 Imolate - Buscador de Seeds Balatro</h1>
+
+  <section>
+    <h2>Busca Manual</h2>
+    <input id="seedInput" placeholder="Buscar código ou descrição" />
+    <select id="seedType">
+      <option value="todos">Todos</option>
+      <option value="curto">Curto</option>
+      <option value="longo">Longo</option>
+      <option value="especial">Especial</option>
+    </select>
+    <input id="seedScore" placeholder="Pontuação mínima ou NaNIF" />
+    <button onclick="buscarSeeds()">Buscar</button>
+    <div id="seedList"></div>
+  </section>
+
+  <section>
+    <h2>Nova Seed Manual</h2>
+    <input id="newCode" placeholder="Código da Seed" />
+    <select id="newType">
+      <option value="curto">Curto</option>
+      <option value="longo">Longo</option>
+      <option value="especial">Especial</option>
+    </select>
+    <textarea id="newDesc" placeholder="Descrição"></textarea>
+    <textarea id="newAction" placeholder="Instrução"></textarea>
+    <input id="newScore" placeholder="Pontuação ou NaNIF" />
+    <button onclick="adicionarSeed()">Adicionar</button>
+  </section>
+
+  <section>
+    <h2>Busca Automática com IA Simulada</h2>
+    <button onclick="startAI()">▶️ Iniciar IA</button>
+    <button onclick="stopAI()">⏹ Parar IA</button>
+    <button onclick="exportarNaNIF()">📄 Exportar Seeds NaNIF</button>
+    <p id="aiStatus">Status: parado</p>
+    <div id="autoSeedsFound"></div>
+    <canvas id="scoreChart" height="150"></canvas>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #121212;
+  color: #eee;
+  padding: 20px;
+}
+h1 {
+  color: #ff5722;
+}
+input, select, textarea, button {
+  width: 100%;
+  max-width: 400px;
+  margin: 5px 0;
+  padding: 8px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+textarea { resize: vertical; }
+button {
+  background: #ff5722;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+button:hover {
+  background: #e64a19;
+}
+section {
+  margin-top: 30px;
+  background: #1c1c1c;
+  padding: 20px;
+  border-radius: 8px;
+}
+#seedList .seed {
+  background: #2a2a2a;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 6px;
+}
+.nanif {
+  color: #ff5252;
+  font-weight: bold;
+}
+canvas {
+  margin-top: 20px;
+  background: #1f1f1f;
+  border-radius: 8px;
+  display: block;
+  max-width: 600px;
+  width: 100%;
+}
+#autoSeedsFound div {
+  margin: 3px 0;
+  font-weight: bold;
+}
