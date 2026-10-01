@@ -1,52 +1,92 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <title>Imolate - Buscador de Seeds Balatro</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
-  <h1>🧠 Imolate - Buscador de Seeds Balatro</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#102b26" />
+    <title>Área Viva — Medidor por Monte Carlo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Área Viva, início"><span class="brand-mark">∿</span> área viva</a>
+        <p class="method-label"><span></span> estimativa por monte carlo</p>
+      </header>
 
-  <section>
-    <h2>Busca Manual</h2>
-    <input id="seedInput" placeholder="Buscar código ou descrição" />
-    <select id="seedType">
-      <option value="todos">Todos</option>
-      <option value="curto">Curto</option>
-      <option value="longo">Longo</option>
-      <option value="especial">Especial</option>
-    </select>
-    <input id="seedScore" placeholder="Pontuação mínima ou NaNIF" />
-    <button onclick="buscarSeeds()">Buscar</button>
-    <div id="seedList"></div>
-  </section>
+      <section class="intro">
+        <div>
+          <p class="eyebrow">MEDIÇÃO A PARTIR DE IMAGEM</p>
+          <h1>Descubra a área<br />que cabe no seu olhar.</h1>
+        </div>
+        <p class="intro-copy">Envie uma foto, use uma medida conhecida como escala e contorne a área desejada. Milhares de pontos aleatórios fazem o restante.</p>
+      </section>
 
-  <section>
-    <h2>Nova Seed Manual</h2>
-    <input id="newCode" placeholder="Código da Seed" />
-    <select id="newType">
-      <option value="curto">Curto</option>
-      <option value="longo">Longo</option>
-      <option value="especial">Especial</option>
-    </select>
-    <textarea id="newDesc" placeholder="Descrição"></textarea>
-    <textarea id="newAction" placeholder="Instrução"></textarea>
-    <input id="newScore" placeholder="Pontuação ou NaNIF" />
-    <button onclick="adicionarSeed()">Adicionar</button>
-  </section>
+      <section class="workspace" aria-label="Área de medição">
+        <div class="steps" aria-label="Etapas da medição">
+          <button class="step active" data-step="upload"><b>01</b><span>Imagem</span></button>
+          <span class="step-line"></span>
+          <button class="step" data-step="scale"><b>02</b><span>Escala</span></button>
+          <span class="step-line"></span>
+          <button class="step" data-step="area"><b>03</b><span>Área</span></button>
+        </div>
 
-  <section>
-    <h2>Busca Automática com IA Simulada</h2>
-    <button onclick="startAI()">▶️ Iniciar IA</button>
-    <button onclick="stopAI()">⏹ Parar IA</button>
-    <button onclick="exportarNaNIF()">📄 Exportar Seeds NaNIF</button>
-    <p id="aiStatus">Status: parado</p>
-    <div id="autoSeedsFound"></div>
-    <canvas id="scoreChart" height="150"></canvas>
-  </section>
+        <div class="tool-grid">
+          <aside class="control-panel">
+            <div class="control-head">
+              <p class="panel-kicker" id="panelKicker">COMECE AQUI</p>
+              <h2 id="panelTitle">Escolha uma imagem</h2>
+              <p id="panelDescription">Uma vista superior ou frontal, sem muita distorção, produz uma estimativa mais confiável.</p>
+            </div>
 
-  <script src="script.js"></script>
-</body>
+            <label class="upload-zone" id="uploadZone" for="imageInput">
+              <input id="imageInput" type="file" accept="image/*" />
+              <span class="upload-icon">↑</span>
+              <strong>Enviar fotografia</strong>
+              <small>PNG, JPG ou WEBP</small>
+            </label>
+
+            <div class="measure-controls" id="measureControls" hidden>
+              <label class="field-label" for="knownDistance">Medida real da referência</label>
+              <div class="value-field">
+                <input id="knownDistance" type="number" min="0.01" step="0.01" value="1" />
+                <select id="distanceUnit" aria-label="Unidade da referência">
+                  <option value="m">metros</option>
+                  <option value="cm">centímetros</option>
+                </select>
+              </div>
+              <p class="field-help">Clique em dois pontos da imagem que correspondem a esta distância.</p>
+              <button class="outline-button" id="startScale" type="button">Marcar referência</button>
+              <button class="outline-button" id="startArea" type="button" disabled>Contornar área</button>
+              <button class="text-button" id="resetButton" type="button">Limpar marcações</button>
+            </div>
+
+            <div class="tip-card"><span>✦</span><p><b>Dica:</b> inclua uma trena, piso conhecido ou outro objeto de tamanho definido na foto.</p></div>
+          </aside>
+
+          <div class="canvas-panel">
+            <div class="canvas-topline"><span id="canvasStatus">Aguardando uma imagem</span><span id="zoomReadout">—</span></div>
+            <div class="canvas-stage empty" id="canvasStage">
+              <canvas id="imageCanvas" aria-label="Imagem para marcar a referência e a área"></canvas>
+              <div class="canvas-placeholder" id="canvasPlaceholder"><span class="placeholder-mark">⌁</span><p>Sua imagem aparecerá aqui</p></div>
+            </div>
+            <p class="canvas-instruction" id="canvasInstruction">Envie uma imagem para começar a medição.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="result-section" id="resultSection" hidden>
+        <div class="result-copy"><p class="eyebrow">SUA ESTIMATIVA</p><h2>Área aproximada</h2><p>O resultado combina a escala marcada com uma amostragem aleatória dentro do contorno.</p></div>
+        <div class="result-card"><p>ÁREA ESTIMADA</p><strong id="areaResult">0,00 <small>m²</small></strong><div class="result-meta"><span><i></i><b id="insidePoints">0</b> pontos internos</span><span><b id="sampleCount">0</b> amostras</span></div></div>
+        <button id="calculateButton" class="calculate-button" type="button">Estimar novamente <span>→</span></button>
+      </section>
+
+      <section class="how-it-works"><p class="eyebrow">COMO FUNCIONA</p><div><article><span>1</span><h3>Calibre</h3><p>Transforme pixels em uma medida real usando uma referência visível.</p></article><article><span>2</span><h3>Contorne</h3><p>Clique nos limites da região. Finalize o traçado no primeiro ponto.</p></article><article><span>3</span><h3>Amostre</h3><p>O método de Monte Carlo sorteia 12 mil pontos para estimar a área.</p></article></div></section>
+    </main>
+    <footer>Área Viva · uma ferramenta experimental de estimativa visual</footer>
+    <script src="script.js"></script>
+  </body>
 </html>
