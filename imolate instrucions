@@ -1,1 +1,2 @@
-
+cd /workspace/imolate
+python3 -m http.server 4173
